@@ -81,7 +81,7 @@ class Main:
             all_options = element.find_all("div", class_="detpost")
             pagination = soup.find("div", class_="pagination")
             paginate = []
-            filterPagination = pagination.find_all("a")
+            filterPagination = pagination.select(".page-numbers")
             for page in filterPagination:
                 pageText = page.get_text().strip()
                 if pageText.isnumeric(): 
@@ -128,12 +128,11 @@ class Main:
                 "code": 500,
                 "desc": "Internal server error " + str(e),
                 "data": {
-                    "ongoing" : [],
-                    "completed" : []
+                    "completed" : [],
+                    "last_page" : 0
                 }
             }
             return response, 500
-
 
     def completedWithPagination(self, page):
         try:
@@ -190,8 +189,131 @@ class Main:
                 "code": 500,
                 "desc": "Internal server error " + str(e),
                 "data": {
+                    "completed" : [],
+                    "last_page" : 0
+                }
+            }
+            return response, 500
+
+    def ongoing(self):
+        try:
+            linkComplete = link+"ongoing-anime/"
+            page = requests.get(linkComplete)
+            soup = BeautifulSoup(page.content, "lxml")
+            element = soup.find("div", class_="venz")
+            all_options = element.find_all("div", class_="detpost")
+            pagination = soup.find("div", class_="pagination")
+            paginate = []
+            filterPagination = pagination.select(".page-numbers")
+            for page in filterPagination:
+                pageText = page.get_text().strip()
+                if pageText.isnumeric(): 
+                    pageNumber = int(pageText)
+                else:
+                    pageNumber = 0
+                paginate.append(pageNumber)
+            completed = []
+            for data in all_options:
+                episode = data.find("div", class_="epz").get_text().strip()
+                date = data.find("div", class_="newnime").get_text().strip()
+                day = data.find("div", class_="epztipe").get_text().strip()
+                anime = data.find("div", class_="thumb")
+                title = anime.find("h2").get_text().strip()
+                idAnime = anime.find("a").get("href").replace(replacerId,"")
+                images = anime.find("img").get("src")
+                obj = {
+                    "episode" : episode,
+                    "day": day,
+                    "date": date,
+                    "title": title,
+                    "id":idAnime,
+                    "images": images
+                }
+                completed.append(obj)
+
+            if not completed:
+                code = 404
+                desc = "Not found"
+            else: 
+                code = 200 
+                desc = "Success"
+            response = {
+                "code" : code,
+                "desc" : desc,
+                "data" : {
+                    "ongoing" : ongoing,
+                    "last_page" : max(paginate)
+                }
+            }
+            return response, code
+        except Exception as e:
+            response = {
+                "code": 500,
+                "desc": "Internal server error " + str(e),
+                "data": {
                     "ongoing" : [],
-                    "completed" : []
+                    "last_page" : 0
+                }
+            }
+            return response, 500
+
+    def ongoingWithPagination(self, page):
+        try:
+            linkComplete = link+"ongoing-anime/page/"+page
+            page = requests.get(linkComplete)
+            soup = BeautifulSoup(page.content, "lxml")
+            element = soup.find("div", class_="venz")
+            all_options = element.find_all("div", class_="detpost")
+            pagination = soup.find("div", class_="pagination")
+            paginate = []
+            filterPagination = pagination.select(".page-numbers")
+            for page in filterPagination:
+                pageText = page.get_text().strip()
+                if pageText.isnumeric(): 
+                    pageNumber = int(pageText)
+                else:
+                    pageNumber = 0
+                paginate.append(pageNumber)
+            ongoing = []
+            for data in all_options:
+                episode = data.find("div", class_="epz").get_text().strip()
+                date = data.find("div", class_="newnime").get_text().strip()
+                day = data.find("div", class_="epztipe").get_text().strip()
+                anime = data.find("div", class_="thumb")
+                title = anime.find("h2").get_text().strip()
+                idAnime = anime.find("a").get("href").replace(replacerId,"")
+                images = anime.find("img").get("src")
+                obj = {
+                    "episode" : episode,
+                    "day": day,
+                    "date": date,
+                    "title": title,
+                    "id":idAnime,
+                    "images": images
+                }
+                ongoing.append(obj)
+            if not ongoing:
+                code = 404
+                desc = "Not found"
+            else: 
+                code = 200 
+                desc = "Success"
+            response = {
+                "code" : code,
+                "desc" : desc,
+                "data" : {
+                    "ongoing" : ongoing,
+                    "last_page" : max(paginate)
+                }
+            }
+            return response, code
+        except Exception as e:
+            response = {
+                "code": 500,
+                "desc": "Internal server error " + str(e),
+                "data": {
+                    "ongoing" : [],
+                    "last_page" : 0
                 }
             }
             return response, 500

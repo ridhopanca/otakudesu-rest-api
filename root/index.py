@@ -20,4 +20,16 @@ def get_complete_pagination(number):
 	route = controller.completedWithPagination(number)
 	return route
 
+@app.route("/ongoing")
+def get_ongoing():
+	controller = Main()
+	route = controller.ongoing()
+	return route
+
+@app.route("/ongoing/page/<number>")
+def get_ongoing_pagination(number):
+	controller = Main()
+	route = controller.ongoingWithPagination(number)
+	return route
+
 	
