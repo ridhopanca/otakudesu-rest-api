@@ -32,4 +32,18 @@ def get_ongoing_pagination(number):
 	route = controller.ongoingWithPagination(number)
 	return route
 
+@app.route("/genres")
+def get_genres():
+	controller = Main()
+	route = controller.genres()
+	return route
+
+@app.route("/genre/<id>/page/<number>")
+def get_anime_by_genre(id,number):
+	controller = Main()
+	route = controller.animeByGenre(id, number)
+	return route
+
+if __name__ == '__main__':
+	app.run()
 	

@@ -212,7 +212,7 @@ class Main:
                 else:
                     pageNumber = 0
                 paginate.append(pageNumber)
-            completed = []
+            ongoing = []
             for data in all_options:
                 episode = data.find("div", class_="epz").get_text().strip()
                 date = data.find("div", class_="newnime").get_text().strip()
@@ -229,9 +229,9 @@ class Main:
                     "id":idAnime,
                     "images": images
                 }
-                completed.append(obj)
+                ongoing.append(obj)
 
-            if not completed:
+            if not ongoing:
                 code = 404
                 desc = "Not found"
             else: 
@@ -317,3 +317,84 @@ class Main:
                 }
             }
             return response, 500
+        
+    def genres(self):
+        try:
+            linkComplete = link+"genre-list/"
+            page = requests.get(linkComplete)
+            soup = BeautifulSoup(page.content, "lxml")
+            element = soup.find("ul", class_="genres")
+            all_options = element.find_all("a")
+            genres = []
+            for data in all_options:
+                obj = {}
+                obj['name'] = data.get_text().strip()
+                idGenre = data.get('href')
+                obj['id'] = idGenre.replace("genres/","").replace("/","")
+                genres.append(obj)
+
+            response ={
+                "code" : 200,
+                "desc" : "Success",
+                "data" : genres
+            }
+            return response, 200
+        except Exception as e:
+            response = {
+                "code": 500,
+                "desc": "Internal server error " + str(e),
+                "data": []
+            }
+            return response, 500
+        
+    def animeByGenre(self, id, page): 
+        try: 
+            linkComplete = link+'genres/'+id+'/page/'+page
+            page = requests.get(linkComplete)
+            soup = BeautifulSoup(page.content, "lxml")
+            element = soup.find("div",class_="venser")
+            all_options = element.find_all('div', class_="col-anime")
+            anime = []
+            for data in all_options:
+                obj = {}
+                obj['title'] = data.find('a').get_text().strip()
+                obj['id'] = data.find('a').get('href').replace(link+'anime','').replace('/','')
+                obj['studio'] = data.find('div',class_='col-anime-studio').get_text()
+                obj['episode'] = data.find('div',class_='col-anime-eps').get_text()
+                obj['rating'] = data.find('div',class_='col-anime-rating').get_text()
+                obj['date'] = data.find('div',class_='col-anime-date').get_text()
+                obj['synopsis'] = data.find('div',class_='col-synopsis').get_text()
+                obj['images'] = data.find('div',class_='col-anime-cover').find('img').get('src')
+                allGenre = []
+                genres = data.find('div',class_='col-anime-genre').find_all('a')
+                for dataGenre in genres: 
+                    objGenre = {}
+                    objGenre['name'] = dataGenre.get_text()
+                    objGenre['id'] = dataGenre.get('href').replace(link+'genres/','').replace('/','')
+                    allGenre.append(objGenre)
+                obj['genres'] = allGenre
+                anime.append(obj)
+
+            
+            if not anime:
+                code =  404
+                desc = "Not found"
+            else:
+                code = 200
+                desc = "Success"
+            response = {}
+            response['code'] = code
+            response['desc'] = desc
+            response['data'] = {
+                "anime" : anime,
+                "last_page" : 0
+            }
+            return response
+        except Exception as e:
+            response = {
+                "code": 500,
+                "desc": "Internal server error " + str(e),
+                "data": []
+            }
+            return response, 500
+        
