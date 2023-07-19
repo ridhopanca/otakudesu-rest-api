@@ -444,4 +444,54 @@ class Main:
                 "data": []
             }
             return response, 500
+
+    def search(self, searching):
+        try: 
+            parse = searching.strip().replace(" ", "+")
+            linkComplete = link+'?s='+parse+'&post_type=anime'
+            page = requests.get(linkComplete)
+            soup = BeautifulSoup(page.content, "lxml")
+            element = soup.find('ul', class_='chivsrc')
+            all_options = element.find_all('li')
+            searchAnime = []
+            for data in all_options:
+                obj ={}
+                obj['images'] = data.find('img').get('src')
+                obj['title'] = data.find('a').get_text().strip()
+                obj['id'] = data.find('a').get('href').replace(link+'anime/','').replace('/','')
+                allSet = data.select('.set')
+                for set in allSet:
+                    set.b.decompose()
+                allGenre = []
+                genres = allSet[0].find_all('a')
+                for dataGenre in genres:
+                    objGenre = {}
+                    objGenre['name'] = dataGenre.get_text()
+                    objGenre['id'] = dataGenre.get('href').replace(link+'genres/','').replace('/','')
+                    allGenre.append(objGenre)
+
+                obj['genres'] = allGenre
+                obj['status'] = allSet[1].get_text().strip().replace(": ","")
+                obj['rating'] = allSet[2].get_text().strip().replace(": ","")
+                searchAnime.append(obj)
+            
+            if not searchAnime:
+                code = 404
+                desc = "Not found"
+            else:
+                code = 200
+                desc = "Success"
+            
+            response = {}
+            response['code'] = code
+            response['desc'] = desc
+            response['data'] = searchAnime
+            return response
+        except Exception as e:
+            response = {
+                "code": 500,
+                "desc": "Internal server error " + str(e),
+                "data": []
+            }
+            return response, 500
         
