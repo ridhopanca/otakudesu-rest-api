@@ -359,11 +359,11 @@ class Main:
                 obj = {}
                 obj['title'] = data.find('a').get_text().strip()
                 obj['id'] = data.find('a').get('href').replace(link+'anime','').replace('/','')
-                obj['studio'] = data.find('div',class_='col-anime-studio').get_text()
-                obj['episode'] = data.find('div',class_='col-anime-eps').get_text()
-                obj['rating'] = data.find('div',class_='col-anime-rating').get_text()
-                obj['date'] = data.find('div',class_='col-anime-date').get_text()
-                obj['synopsis'] = data.find('div',class_='col-synopsis').get_text()
+                obj['studio'] = data.find('div',class_='col-anime-studio').get_text().strip()
+                obj['episode'] = data.find('div',class_='col-anime-eps').get_text().strip()
+                obj['rating'] = data.find('div',class_='col-anime-rating').get_text().strip()
+                obj['date'] = data.find('div',class_='col-anime-date').get_text().strip()
+                obj['synopsis'] = data.find('div',class_='col-synopsis').get_text().strip()
                 obj['images'] = data.find('div',class_='col-anime-cover').find('img').get('src')
                 allGenre = []
                 genres = data.find('div',class_='col-anime-genre').find_all('a')
