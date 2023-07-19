@@ -44,6 +44,12 @@ def get_anime_by_genre(id,number):
 	route = controller.animeByGenre(id, number)
 	return route
 
+@app.route("/schedule")
+def get_schedule():
+	controller = Main()
+	route = controller.schedule()
+	return route
+
 if __name__ == '__main__':
 	app.run()
 	

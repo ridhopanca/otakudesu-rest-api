@@ -355,6 +355,16 @@ class Main:
             element = soup.find("div",class_="venser")
             all_options = element.find_all('div', class_="col-anime")
             anime = []
+            pagination = soup.find("div", class_="pagination")
+            paginate = []
+            filterPagination = pagination.select(".page-numbers")
+            for page in filterPagination:
+                pageText = page.get_text().strip()
+                if pageText.isnumeric(): 
+                    pageNumber = int(pageText)
+                else:
+                    pageNumber = 0
+                paginate.append(pageNumber)
             for data in all_options:
                 obj = {}
                 obj['title'] = data.find('a').get_text().strip()
@@ -387,8 +397,45 @@ class Main:
             response['desc'] = desc
             response['data'] = {
                 "anime" : anime,
-                "last_page" : 0
+                "last_page" : max(paginate)
             }
+            return response, code
+        except Exception as e:
+            response = {
+                "code": 500,
+                "desc": "Internal server error " + str(e),
+                "data": {
+                    "anime" : [],
+                    "last_page" : 0
+                }
+            }
+            return response, 500
+    
+    def schedule(self):
+        try:
+            linkComplete = link+'jadwal-rilis'
+            page = requests.get(linkComplete)
+            soup = BeautifulSoup(page.content, "lxml")
+            schedules = []
+            element = soup.find('div', class_='kgjdwl321')
+            all_options = element.find_all('div',class_="kglist321")
+            for data in all_options:
+                obj = {}
+                obj['day'] = data.find('h2').get_text().strip()
+                animeList = []
+                animes = data.find_all('a')
+                for dataAnime in animes:
+                    objAnime = {}
+                    objAnime['id'] = dataAnime.get('href').replace(link+"anime/",'').replace('/','')
+                    objAnime['title'] = dataAnime.get_text().strip()
+                    animeList.append(objAnime)
+                obj['anime'] = animeList  
+                schedules.append(obj)
+
+            response = {}
+            response['code'] = 200
+            response['desc'] = 'Success'
+            response['data'] = schedules
             return response
         except Exception as e:
             response = {
