@@ -486,7 +486,7 @@ class Main:
             response['code'] = code
             response['desc'] = desc
             response['data'] = searchAnime
-            return response
+            return response, code
         except Exception as e:
             response = {
                 "code": 500,

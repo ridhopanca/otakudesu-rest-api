@@ -1,5 +1,7 @@
 from flask import Flask
 from root.model.main import Main
+from root.model.anime import Anime
+
 app = Flask(__name__)
 
 @app.route("/home")
@@ -53,6 +55,12 @@ def get_schedule():
 def get_search(query):
 	controller = Main()
 	result = controller.search(query)
+	return result
+
+@app.route("/anime/<id>")
+def get_anime(id):
+	controller = Anime()
+	result = controller.anime(id)
 	return result
 
 if __name__ == '__main__':
