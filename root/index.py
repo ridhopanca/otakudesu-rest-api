@@ -4,6 +4,10 @@ from root.model.anime import Anime
 
 app = Flask(__name__)
 
+@app.route("/")
+def welcome():
+	return "Welcome to unofficial otakudesu-rest-api"
+
 @app.route("/home")
 def get_home():
 	controller = Main()
