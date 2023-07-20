@@ -1,8 +1,10 @@
 from flask import Flask
+from flask_cors import CORS
 from root.model.main import Main
 from root.model.anime import Anime
 
 app = Flask(__name__)
+CORS(app)
 
 @app.route("/")
 def welcome():

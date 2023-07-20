@@ -8,6 +8,7 @@ flask = "*"
 beautifulsoup4 = "*"
 lxml = "*"
 requests = "*"
+flask-cors = "*"
 
 [dev-packages]
 
