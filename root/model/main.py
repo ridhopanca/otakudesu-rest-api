@@ -19,7 +19,7 @@ class Main:
                 day = data.find("div", class_="epztipe").get_text().strip()
                 anime = data.find("div", class_="thumb")
                 title = anime.find("h2").get_text().strip()
-                idAnime = anime.find("a").get("href").replace(replacerId,"")
+                idAnime = anime.find("a").get("href").replace(replacerId,"").replace("/","")
                 images = anime.find("img").get("src")
                 obj = {
                     "episode" : episode,
@@ -40,7 +40,7 @@ class Main:
                 rate = data.find("div", class_="epztipe").get_text().strip()
                 anime = data.find("div", class_="thumb")
                 title = anime.find("h2").get_text().strip()
-                idAnime = anime.find("a").get("href").replace(replacerId,"")
+                idAnime = anime.find("a").get("href").replace(replacerId,"").replace("/","")
                 images = anime.find("img").get("src")
                 obj = {
                     "episode" : episode,
@@ -96,7 +96,7 @@ class Main:
                 rate = data.find("div", class_="epztipe").get_text().strip()
                 anime = data.find("div", class_="thumb")
                 title = anime.find("h2").get_text().strip()
-                idAnime = anime.find("a").get("href").replace(replacerId,"")
+                idAnime = anime.find("a").get("href").replace(replacerId,"").replace("/","")
                 images = anime.find("img").get("src")
                 obj = {
                     "episode" : episode,
@@ -158,7 +158,7 @@ class Main:
                 rate = data.find("div", class_="epztipe").get_text().strip()
                 anime = data.find("div", class_="thumb")
                 title = anime.find("h2").get_text().strip()
-                idAnime = anime.find("a").get("href").replace(replacerId,"")
+                idAnime = anime.find("a").get("href").replace(replacerId,"").replace("/","")
                 images = anime.find("img").get("src")
                 obj = {
                     "episode" : episode,
@@ -219,7 +219,7 @@ class Main:
                 day = data.find("div", class_="epztipe").get_text().strip()
                 anime = data.find("div", class_="thumb")
                 title = anime.find("h2").get_text().strip()
-                idAnime = anime.find("a").get("href").replace(replacerId,"")
+                idAnime = anime.find("a").get("href").replace(replacerId,"").replace("/","")
                 images = anime.find("img").get("src")
                 obj = {
                     "episode" : episode,
@@ -281,7 +281,7 @@ class Main:
                 day = data.find("div", class_="epztipe").get_text().strip()
                 anime = data.find("div", class_="thumb")
                 title = anime.find("h2").get_text().strip()
-                idAnime = anime.find("a").get("href").replace(replacerId,"")
+                idAnime = anime.find("a").get("href").replace(replacerId,"").replace("/","")
                 images = anime.find("img").get("src")
                 obj = {
                     "episode" : episode,
@@ -328,9 +328,9 @@ class Main:
             genres = []
             for data in all_options:
                 obj = {}
-                obj['name'] = data.get_text().strip()
-                idGenre = data.get('href')
-                obj['id'] = idGenre.replace("genres/","").replace("/","")
+                obj["name"] = data.get_text().strip()
+                idGenre = data.get("href")
+                obj["id"] = idGenre.replace("genres/","").replace("/","")
                 genres.append(obj)
 
             response ={
@@ -349,11 +349,11 @@ class Main:
         
     def animeByGenre(self, id, page): 
         try: 
-            linkComplete = link+'genres/'+id+'/page/'+page
+            linkComplete = link+"genres/"+id+"/page/"+page
             page = requests.get(linkComplete)
             soup = BeautifulSoup(page.content, "lxml")
             element = soup.find("div",class_="venser")
-            all_options = element.find_all('div', class_="col-anime")
+            all_options = element.find_all("div", class_="col-anime")
             anime = []
             pagination = soup.find("div", class_="pagination")
             paginate = []
@@ -367,22 +367,22 @@ class Main:
                 paginate.append(pageNumber)
             for data in all_options:
                 obj = {}
-                obj['title'] = data.find('a').get_text().strip()
-                obj['id'] = data.find('a').get('href').replace(link+'anime','').replace('/','')
-                obj['studio'] = data.find('div',class_='col-anime-studio').get_text().strip()
-                obj['episode'] = data.find('div',class_='col-anime-eps').get_text().strip()
-                obj['rating'] = data.find('div',class_='col-anime-rating').get_text().strip()
-                obj['date'] = data.find('div',class_='col-anime-date').get_text().strip()
-                obj['synopsis'] = data.find('div',class_='col-synopsis').get_text().strip()
-                obj['images'] = data.find('div',class_='col-anime-cover').find('img').get('src')
+                obj["title"] = data.find("a").get_text().strip()
+                obj["id"] = data.find("a").get("href").replace(link+"anime","").replace("/","")
+                obj["studio"] = data.find("div",class_="col-anime-studio").get_text().strip()
+                obj["episode"] = data.find("div",class_="col-anime-eps").get_text().strip()
+                obj["rating"] = data.find("div",class_="col-anime-rating").get_text().strip()
+                obj["date"] = data.find("div",class_="col-anime-date").get_text().strip()
+                obj["synopsis"] = data.find("div",class_="col-synopsis").get_text().strip()
+                obj["images"] = data.find("div",class_="col-anime-cover").find("img").get("src")
                 allGenre = []
-                genres = data.find('div',class_='col-anime-genre').find_all('a')
+                genres = data.find("div",class_="col-anime-genre").find_all("a")
                 for dataGenre in genres: 
                     objGenre = {}
-                    objGenre['name'] = dataGenre.get_text()
-                    objGenre['id'] = dataGenre.get('href').replace(link+'genres/','').replace('/','')
+                    objGenre["name"] = dataGenre.get_text()
+                    objGenre["id"] = dataGenre.get("href").replace(link+"genres/","").replace("/","")
                     allGenre.append(objGenre)
-                obj['genres'] = allGenre
+                obj["genres"] = allGenre
                 anime.append(obj)
 
             
@@ -393,9 +393,9 @@ class Main:
                 code = 200
                 desc = "Success"
             response = {}
-            response['code'] = code
-            response['desc'] = desc
-            response['data'] = {
+            response["code"] = code
+            response["desc"] = desc
+            response["data"] = {
                 "anime" : anime,
                 "last_page" : max(paginate)
             }
@@ -413,29 +413,29 @@ class Main:
     
     def schedule(self):
         try:
-            linkComplete = link+'jadwal-rilis'
+            linkComplete = link+"jadwal-rilis"
             page = requests.get(linkComplete)
             soup = BeautifulSoup(page.content, "lxml")
             schedules = []
-            element = soup.find('div', class_='kgjdwl321')
-            all_options = element.find_all('div',class_="kglist321")
+            element = soup.find("div", class_="kgjdwl321")
+            all_options = element.find_all("div",class_="kglist321")
             for data in all_options:
                 obj = {}
-                obj['day'] = data.find('h2').get_text().strip()
+                obj["day"] = data.find("h2").get_text().strip()
                 animeList = []
-                animes = data.find_all('a')
+                animes = data.find_all("a")
                 for dataAnime in animes:
                     objAnime = {}
-                    objAnime['id'] = dataAnime.get('href').replace(link+"anime/",'').replace('/','')
-                    objAnime['title'] = dataAnime.get_text().strip()
+                    objAnime["id"] = dataAnime.get("href").replace(link+"anime/","").replace("/","")
+                    objAnime["title"] = dataAnime.get_text().strip()
                     animeList.append(objAnime)
-                obj['anime'] = animeList  
+                obj["anime"] = animeList  
                 schedules.append(obj)
 
             response = {}
-            response['code'] = 200
-            response['desc'] = 'Success'
-            response['data'] = schedules
+            response["code"] = 200
+            response["desc"] = "Success"
+            response["data"] = schedules
             return response
         except Exception as e:
             response = {
@@ -448,31 +448,31 @@ class Main:
     def search(self, searching):
         try: 
             parse = searching.strip().replace(" ", "+")
-            linkComplete = link+'?s='+parse+'&post_type=anime'
+            linkComplete = link+"?s="+parse+"&post_type=anime"
             page = requests.get(linkComplete)
             soup = BeautifulSoup(page.content, "lxml")
-            element = soup.find('ul', class_='chivsrc')
-            all_options = element.find_all('li')
+            element = soup.find("ul", class_="chivsrc")
+            all_options = element.find_all("li")
             searchAnime = []
             for data in all_options:
                 obj ={}
-                obj['images'] = data.find('img').get('src')
-                obj['title'] = data.find('a').get_text().strip()
-                obj['id'] = data.find('a').get('href').replace(link+'anime/','').replace('/','')
-                allSet = data.select('.set')
+                obj["images"] = data.find("img").get("src")
+                obj["title"] = data.find("a").get_text().strip()
+                obj["id"] = data.find("a").get("href").replace(link+"anime/","").replace("/","")
+                allSet = data.select(".set")
                 for set in allSet:
                     set.b.decompose()
                 allGenre = []
-                genres = allSet[0].find_all('a')
+                genres = allSet[0].find_all("a")
                 for dataGenre in genres:
                     objGenre = {}
-                    objGenre['name'] = dataGenre.get_text()
-                    objGenre['id'] = dataGenre.get('href').replace(link+'genres/','').replace('/','')
+                    objGenre["name"] = dataGenre.get_text()
+                    objGenre["id"] = dataGenre.get("href").replace(link+"genres/","").replace("/","")
                     allGenre.append(objGenre)
 
-                obj['genres'] = allGenre
-                obj['status'] = allSet[1].get_text().strip().replace(": ","")
-                obj['rating'] = allSet[2].get_text().strip().replace(": ","")
+                obj["genres"] = allGenre
+                obj["status"] = allSet[1].get_text().strip().replace(": ","")
+                obj["rating"] = allSet[2].get_text().strip().replace(": ","")
                 searchAnime.append(obj)
             
             if not searchAnime:
@@ -483,9 +483,9 @@ class Main:
                 desc = "Success"
             
             response = {}
-            response['code'] = code
-            response['desc'] = desc
-            response['data'] = searchAnime
+            response["code"] = code
+            response["desc"] = desc
+            response["data"] = searchAnime
             return response, code
         except Exception as e:
             response = {
