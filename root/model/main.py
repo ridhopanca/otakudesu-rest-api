@@ -37,14 +37,14 @@ class Main:
             for data in completed_options:
                 episode = data.find("div", class_="epz").get_text().strip()
                 date = data.find("div", class_="newnime").get_text().strip()
-                rate = data.find("div", class_="epztipe").get_text().strip()
+                rating = data.find("div", class_="epztipe").get_text().strip()
                 anime = data.find("div", class_="thumb")
                 title = anime.find("h2").get_text().strip()
                 idAnime = anime.find("a").get("href").replace(replacerId,"").replace("/","")
                 images = anime.find("img").get("src")
                 obj = {
                     "episode" : episode,
-                    "rate": rate,
+                    "rating": rating,
                     "date": date,
                     "title": title,
                     "id":idAnime,
@@ -93,14 +93,14 @@ class Main:
             for data in all_options:
                 episode = data.find("div", class_="epz").get_text().strip()
                 date = data.find("div", class_="newnime").get_text().strip()
-                rate = data.find("div", class_="epztipe").get_text().strip()
+                rating = data.find("div", class_="epztipe").get_text().strip()
                 anime = data.find("div", class_="thumb")
                 title = anime.find("h2").get_text().strip()
                 idAnime = anime.find("a").get("href").replace(replacerId,"").replace("/","")
                 images = anime.find("img").get("src")
                 obj = {
                     "episode" : episode,
-                    "rate": rate,
+                    "rating": rating,
                     "date": date,
                     "title": title,
                     "id":idAnime,
@@ -155,14 +155,14 @@ class Main:
             for data in all_options:
                 episode = data.find("div", class_="epz").get_text().strip()
                 date = data.find("div", class_="newnime").get_text().strip()
-                rate = data.find("div", class_="epztipe").get_text().strip()
+                rating = data.find("div", class_="epztipe").get_text().strip()
                 anime = data.find("div", class_="thumb")
                 title = anime.find("h2").get_text().strip()
                 idAnime = anime.find("a").get("href").replace(replacerId,"").replace("/","")
                 images = anime.find("img").get("src")
                 obj = {
                     "episode" : episode,
-                    "rate": rate,
+                    "rating": rating,
                     "date": date,
                     "title": title,
                     "id":idAnime,
