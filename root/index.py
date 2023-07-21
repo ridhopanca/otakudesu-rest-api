@@ -69,6 +69,14 @@ def get_anime(id):
 	result = controller.anime(id)
 	return result
 
+
+@app.route('/episode/<id>', defaults={'stream': None})
+@app.route("/episode/<id>/<stream>")
+def get_episode(id, stream):
+	controller = Anime()
+	result = controller.episode(id, stream)
+	return result
+	
 if __name__ == '__main__':
 	app.run()
 	

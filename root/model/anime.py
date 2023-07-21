@@ -7,7 +7,6 @@ class Anime:
         try:
             linkComplete = link+'anime/'+id
             page = requests.get(linkComplete, allow_redirects=False)
-            print(page.status_code)
             if page.status_code == 302 or page.status_code == 404:
                 code = 404
                 desc = 'Not found'
@@ -72,6 +71,65 @@ class Anime:
             response = {
                 "code": 500,
                 "desc": "Internal server error " + str(e),
-                "data": []
+                "data": {}
+            }
+            return response, 500
+    
+    def episode(self, id, stream):
+        try:
+            linkComplete = link+'episode/'+id
+            page = requests.get(linkComplete, allow_redirects=False)
+            if page.status_code == 302 or page.status_code == 404:
+                code = 404
+                desc = 'Not found'
+                response = {}
+                response['code'] = code
+                response['desc'] = desc
+                response['data'] = {}
+                return response, code
+            code = 200
+            desc = 'Success'
+            detail = {}
+            response = {}
+            soup = BeautifulSoup(page.content, "lxml")
+            prev = soup.find("a", string="Previous Eps.")
+            next = soup.find("a", string="Next Eps.")
+            detail['title'] = soup.select_one('.posttl').get_text().strip()
+            detail['stream'] = soup.find(id="pembed").find("iframe").get('src') if stream else None
+            detail['all_episode'] = soup.find("a",string="See All Episodes").get('href').replace(link+"anime/","").replace("/","")
+            detail['prev_episode'] = prev.get("href").replace(link+"episode/","").replace("/","") if prev is not None else None
+            detail['next_episode'] = next.get("href").replace(link+"episode/","").replace("/","") if next is not None else None
+            downloads = []
+            elementDownloads = soup.find('div',class_='download').select('ul')
+            for index, data in enumerate(elementDownloads):
+                allDownload = []
+                listResolusion = data.find_all('li')
+                for list in listResolusion:
+                    detailDownload = {}
+                    listDownload = []
+                    elementDetail = list.find_all('a')
+                    for child in elementDetail:
+                        obj = {}
+                        obj['link'] = child.get('href')
+                        obj['name'] = child.get_text().strip()
+                        listDownload.append(obj)
+                    detailDownload['resolution'] = list.find('strong').get_text().strip()
+                    detailDownload['links'] = listDownload
+                    allDownload.append(detailDownload)
+                objDownloads = {}
+                objDownloads['format'] = "MP4" if index == 0 else "MKV" if index == 1 else "LAINNYA"
+                objDownloads['list'] = allDownload
+                downloads.append(objDownloads)
+
+            detail['downloads'] = downloads
+            response['code'] = code
+            response['desc'] = desc
+            response['data'] = detail
+            return response, code
+        except Exception as e:
+            response = {
+                "code": 500,
+                "desc": "Internal server error " + str(e),
+                "data": {}
             }
             return response, 500
