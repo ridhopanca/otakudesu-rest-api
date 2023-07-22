@@ -1,10 +1,12 @@
 from flask import Flask, Blueprint
 from flask_cors import CORS
+from flask_bcrypt import Bcrypt
 from root.model.main import Main
 from root.model.anime import Anime
 
 app = Flask(__name__)
 CORS(app)
+bcrypt = Bcrypt(app)
 bp = Blueprint("API",__name__,url_prefix="/api")
 #   main controller
 @bp.route("/")
@@ -79,13 +81,19 @@ def get_anime(id):
 @bp.route("/episode/<id>/<stream>")
 def get_episode(id, stream):
 	controller = Anime()
-	result = controller.episode(id, stream)
+	result = controller.episode(id, stream, bcrypt)
 	return result
 
 @bp.route("/batch/<id>")
 def get_batch(id):
 	controller = Anime()
 	result = controller.batch(id)
+	return result
+
+@bp.route("/random")
+def get_random():
+	controller = Anime()
+	result = controller.random()
 	return result
 
 # end anime detail controller
