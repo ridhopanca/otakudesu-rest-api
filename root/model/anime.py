@@ -25,7 +25,7 @@ class Anime:
             detail["images"] = element.find("div", class_="fotoanime").find("img").get("src")
             detail["title"] = details[0].get_text().strip().replace("Judul: ","")
             detail["japanese"] = details[1].get_text().strip().replace("Japanese: ","")
-            detail["rating"] = details[2].get_text().strip().replace("Skor: ","")
+            detail["rating"] = details[2].get_text().strip().replace("Skor: ","").replace("Skor:","")
             detail["producer"] = details[3].get_text().strip().replace("Produser: ","")
             detail["type"] = details[4].get_text().strip().replace("Tipe: ","")
             detail["status"] = details[5].get_text().strip().replace("Status: ","")
