@@ -41,6 +41,7 @@ class Anime:
                     objGenre["id"] = dataGenre.get("href").replace(link+"genres/","").replace("/","")
                     allGenre.append(objGenre)
             detail["genres"] = allGenre
+            detail["synopsis"] = element.find("div", class_="sinopc").get_text().strip()
             animeList = element.select(".episodelist")
             batchs = []
             episodes = []
