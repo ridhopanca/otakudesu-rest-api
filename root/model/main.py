@@ -80,7 +80,7 @@ class Main:
             element = soup.find("div", class_="venz")
             all_options = element.find_all("div", class_="detpost")
             pagination = soup.find("div", class_="pagination")
-            paginate = []
+            paginate = [1]
             filterPagination = pagination.select(".page-numbers")
             for page in filterPagination:
                 pageText = page.get_text().strip()
@@ -142,7 +142,7 @@ class Main:
             element = soup.find("div", class_="venz")
             all_options = element.find_all("div", class_="detpost")
             pagination = soup.find("div", class_="pagination")
-            paginate = []
+            paginate = [1]
             filterPagination = pagination.select(".page-numbers")
             for page in filterPagination:
                 pageText = page.get_text().strip()
@@ -203,7 +203,7 @@ class Main:
             element = soup.find("div", class_="venz")
             all_options = element.find_all("div", class_="detpost")
             pagination = soup.find("div", class_="pagination")
-            paginate = []
+            paginate = [1]
             filterPagination = pagination.select(".page-numbers")
             for page in filterPagination:
                 pageText = page.get_text().strip()
@@ -265,7 +265,7 @@ class Main:
             element = soup.find("div", class_="venz")
             all_options = element.find_all("div", class_="detpost")
             pagination = soup.find("div", class_="pagination")
-            paginate = []
+            paginate = [1]
             filterPagination = pagination.select(".page-numbers")
             for page in filterPagination:
                 pageText = page.get_text().strip()
@@ -347,7 +347,7 @@ class Main:
             }
             return response, 500
         
-    def animeByGenre(self, id, page): 
+    def animeByGenre(self, id, page):
         try: 
             linkComplete = link+"genres/"+id+"/page/"+page
             page = requests.get(linkComplete)
@@ -356,14 +356,14 @@ class Main:
             all_options = element.find_all("div", class_="col-anime")
             anime = []
             pagination = soup.find("div", class_="pagination")
-            paginate = []
+            paginate = [1]
             filterPagination = pagination.select(".page-numbers")
             for page in filterPagination:
                 pageText = page.get_text().strip()
                 if pageText.isnumeric(): 
                     pageNumber = int(pageText)
                 else:
-                    pageNumber = 0
+                    pageNumber = 1
                 paginate.append(pageNumber)
             for data in all_options:
                 obj = {}
@@ -384,7 +384,6 @@ class Main:
                     allGenre.append(objGenre)
                 obj["genres"] = allGenre
                 anime.append(obj)
-
             
             if not anime:
                 code =  404
