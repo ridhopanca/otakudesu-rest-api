@@ -1,6 +1,6 @@
 import requests
 from bs4 import BeautifulSoup
-link = "https://otakudesu.lol/"
+link = "https://otakudesu.wiki/"
 replacerId = link+"anime/"
 
 class Main:
