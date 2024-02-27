@@ -1,6 +1,6 @@
 import requests
 from bs4 import BeautifulSoup
-link = "https://otakudesu.cam/"
+link = "https://otakudesu.cloud/"
 
 class Anime:
     def anime(self, id):
